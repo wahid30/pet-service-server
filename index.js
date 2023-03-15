@@ -1,18 +1,18 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
 // middle ware
 app.use(cors());
 app.use(express.json());
 
-userName: vaitasraizel;
-pass: CVBXbWxsmjoMX8nP;
+// userName: dbUsers;
+// pass: q13lCMP6JE63iEs3;
 
 const uri =
-  "mongodb+srv://vaitasraizel:CVBXbWxsmjoMX8nP@cluster0.cpadwda.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://dbUsers:q13lCMP6JE63iEs3@cluster0.cpadwda.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -21,23 +21,79 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const animalAdoptions = client
-      .db("animalAdoptions")
-      .collection("adaptions");
+    const userComments = client.db("userComments").collection("comments");
+    const VeterinaryServices = client
+      .db("VeterinaryServices")
+      .collection("Veterinary_Services");
+    const VaccinationCareServices = client
+      .db("VaccinationCareServices")
+      .collection("VaccinationCare_Services");
+    const NeuterServices = client
+      .db("NeuterServices")
+      .collection("Neuter_Services");
 
-    app.get("/adaptAnimals", async (req, res) => {
-      const cursor = animalAdoptions.find({});
-      const animals = await cursor.toArray();
-      res.send(animals);
+    app.get("/comments", async (req, res) => {
+      const query = {};
+      const cursor = userComments.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     });
 
-    app.post("/adaptAnimals", async (req, res) => {
+    app.post("/comments", async (req, res) => {
       console.log("post api called");
-      const animals = req.body;
-      const result = await animalAdoptions.insertOne(animals);
-      animals.id = result.insertedId;
-      res.send(animals);
+      const cmd = req.body;
+      const result = await userComments.insertOne(cmd);
+      res.send(result);
     });
+
+    app.get("/VeterinarianServices", async (req, res) => {
+      const query = {};
+      const cursor = VeterinaryServices.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/VeterinarianServices", async (req, res) => {
+      console.log("post api called");
+      const cmd = req.body;
+      const result = await VeterinaryServices.insertOne(cmd);
+      res.send(result);
+    });
+
+    app.get("/VaccinationCareServices", async (req, res) => {
+      const query = {};
+      const cursor = VaccinationCareServices.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/VaccinationCareServices", async (req, res) => {
+      console.log("post api called");
+      const cmd = req.body;
+      const result = await VaccinationCareServices.insertOne(cmd);
+      res.send(result);
+    });
+
+    app.get("/NeuterServices", async (req, res) => {
+      const query = {};
+      const cursor = NeuterServices.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/NeuterServices", async (req, res) => {
+      console.log("post api called");
+      const cmd = req.body;
+      const result = await NeuterServices.insertOne(cmd);
+      res.send(result);
+    });
+
+    // app.delete("/comments/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { _id: new ObjectId(id) };
+    //   const result = await userComments.deleteOne(query);
+    //   res.send(result);
+    // });
   } finally {
   }
 }
