@@ -31,6 +31,12 @@ async function run() {
     const NeuterServices = client
       .db("NeuterServices")
       .collection("Neuter_Services");
+    const dayCareServices = client
+      .db("dayCareServices")
+      .collection("dayCare_Services");
+    const animalAdoptions = client
+      .db("animalAdoptions")
+      .collection("adaptions");
 
     app.get("/comments", async (req, res) => {
       const query = {};
@@ -85,6 +91,27 @@ async function run() {
       console.log("post api called");
       const cmd = req.body;
       const result = await NeuterServices.insertOne(cmd);
+      res.send(result);
+    });
+
+    app.get("/dayCareServices", async (req, res) => {
+      const query = {};
+      const cursor = dayCareServices.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/dayCareServices", async (req, res) => {
+      console.log("post api called");
+      const cmd = req.body;
+      const result = await dayCareServices.insertOne(cmd);
+      res.send(result);
+    });
+
+    app.get("/animalAdoptions", async (req, res) => {
+      const query = {};
+      const cursor = animalAdoptions.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
 
